@@ -47,6 +47,8 @@ namespace BundlerMinifier
             if (int.TryParse(indentSize, out size))
                 settings.IndentSize = size;
 
+            settings.IgnoreAllErrors = bundle.IgnoreErrors;
+
             return settings;
         }
 

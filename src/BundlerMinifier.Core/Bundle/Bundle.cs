@@ -48,6 +48,14 @@ namespace BundlerMinifier
             }
         }
 
+        internal bool IgnoreErrors
+        {
+            get
+            {
+                return Minify.ContainsKey("ignoreErrors") && Minify["ignoreErrors"].ToString().Equals("true", StringComparison.OrdinalIgnoreCase);
+            }
+        }
+
         [JsonIgnore]
         public bool OutputIsMinFile
         {

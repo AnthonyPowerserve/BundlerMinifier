@@ -92,7 +92,6 @@ namespace BundlerMinifier
         private static void MinifyCss(Bundle bundle, MinificationResult minResult)
         {
             var settings = CssOptions.GetSettings(bundle);
-
             var uglifyResult = Uglify.Css(bundle.Output, minResult.FileName, settings);
             WriteMinFile(bundle, minResult, uglifyResult);
         }

@@ -6,9 +6,9 @@ using BundlerMinifier;
 [assembly: AssemblyTitle("Bundler & Minifier")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Mads Kristensen")]
+[assembly: AssemblyCompany("Mads Kristensen & Others")]
 [assembly: AssemblyProduct("Bundler & Minifier Core")]
-[assembly: AssemblyCopyright("Copyright © 2018")]
+[assembly: AssemblyCopyright("Copyright © 2020")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

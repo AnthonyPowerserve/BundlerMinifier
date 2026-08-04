@@ -18,29 +18,32 @@
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <IncludeSymbols>true</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
-    <TargetFramework>net9.0</TargetFramework>
+    <TargetFramework>netstandard2.0</TargetFramework>
     <Authors>Mads Kristensen &amp; Others</Authors>
     <Copyright>Copyright 2026</Copyright>
     <PackageIcon>logo.png</PackageIcon>
-    <PackageProjectUrl>https://github.com/AnthonyPowerserve/BundlerMinifier</PackageProjectUrl>
     <PackageReadmeFile>README.md</PackageReadmeFile>
-    <PackageLicenseFile>LICENSE</PackageLicenseFile>
+    <NuGetAuditLevel>low</NuGetAuditLevel>
+    <NuGetAuditMode>all</NuGetAuditMode>
+    <Version>1.0.5</Version>
   </PropertyGroup>
+
+	<PropertyGroup Condition="'$(TargetFramework)' == 'net6.0' OR '$(TargetFramework)' == 'net8.0' OR '$(TargetFramework)' == 'netstandard2.0'">
+		<GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
+		<OutputType>Exe</OutputType>
+		<PackAsTool>true</PackAsTool>
+		<ToolCommandName>bundle</ToolCommandName>
+	</PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="10.0.301" PrivateAssets="All" />
   </ItemGroup>
-
 
   <ItemGroup>
     <PackageReference Include="Microsoft.Build.Framework" Version="18.8.2" PrivateAssets="All" />
     <PackageReference Include="Microsoft.Build.Utilities.Core" Version="18.8.2" PrivateAssets="All" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.4" PrivateAssets="All" />
     <PackageReference Include="NUglify" Version="1.22.3" PrivateAssets="All" />
-  </ItemGroup>
-
-  <ItemGroup Condition="'$(TargetFramework)' == 'netstandard1.3'">
-    <PackageReference Include="System.IO.FileSystem.Watcher" Version="4.0.0" PrivateAssets="All" />
   </ItemGroup>
 
   <ItemGroup>
