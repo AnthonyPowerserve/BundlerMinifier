@@ -7,7 +7,7 @@
   <UsingTask AssemblyFile="$(_BundlerMinifierTaskAssembly)" TaskName="BundlerMinifier.BundlerBuildTask"/>
   <UsingTask AssemblyFile="$(_BundlerMinifierTaskAssembly)" TaskName="BundlerMinifier.BundlerCleanTask"/>
 
-  <Target Name="BundleMinify" AfterTargets="CompileTypeScriptWithTSConfig" BeforeTargets="BeforeCompile" Condition="'$(RunBundleMinify)' != 'False'">
+  <Target Name="BundleMinify" AfterTargets="CompileTypeScriptWithTSConfig" BeforeTargets="BeforeBuild" Condition="'$(RunBundleMinify)' != 'False'">
     <BundlerMinifier.BundlerBuildTask FileName="$(MSBuildProjectDirectory)\bundleconfig.json" />
   </Target>
 
