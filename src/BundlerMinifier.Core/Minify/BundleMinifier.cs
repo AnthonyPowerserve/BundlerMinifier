@@ -101,13 +101,19 @@ namespace BundlerMinifier
             else
             {
                 bundle.Output = bundle.Output
+                    .Replace("\r\n", " ")
+                    .Replace("\r", " ")
+                    .Replace("\n", " ")
                     .Replace("\t", string.Empty)
-                    .Replace("\r", string.Empty)
-                    .Replace("\n", string.Empty)
-                    .Replace("    ", string.Empty)
+                    .Replace("    ", " ")
+                    .Replace("   ", " ")
+                    .Replace("  ", " ")
+                    .Replace("  ", " ")
                     .Replace(" {", "{")
+                    .Replace("} ", "}")
                     .Replace(": ", ":")
-                    .Replace(" 0px", "0")
+                    .Replace(" 0px", " 0")
+                    .Replace(", ", ",")
                     ;
             }
             WriteMinFile(bundle, minResult);
@@ -132,7 +138,7 @@ namespace BundlerMinifier
                 minResult.Changed |= containsChanges;
                 OnBeforeWritingMinFile(minResult.FileName, minFile, bundle, containsChanges);
 
-                if (containsChanges)
+                if (containsChanges || bundle.ForceRebundle)
                 {
                     Directory.CreateDirectory(Path.GetDirectoryName(minFile));
                     File.WriteAllText(minFile, minResult.MinifiedContent, new UTF8Encoding(false));

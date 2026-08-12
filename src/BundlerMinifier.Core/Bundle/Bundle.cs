@@ -64,6 +64,9 @@ namespace BundlerMinifier
             }
         }
 
+        [JsonProperty("forceRebundle")]
+        public bool ForceRebundle { get; set; }
+
         [JsonIgnore]
         public bool OutputIsMinFile
         {
