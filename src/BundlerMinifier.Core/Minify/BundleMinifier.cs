@@ -3,6 +3,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.IO.Compression;
 using System.Text;
+using System.Text.RegularExpressions;
 using NUglify;
 using NUglify.JavaScript;
 
@@ -92,8 +93,24 @@ namespace BundlerMinifier
         private static void MinifyCss(Bundle bundle, MinificationResult minResult)
         {
             var settings = CssOptions.GetSettings(bundle);
-            var uglifyResult = Uglify.Css(bundle.Output, minResult.FileName, settings);
-            WriteMinFile(bundle, minResult, uglifyResult);
+            if (bundle.UseNuglify)
+            {
+                var uglifyResult = Uglify.Css(bundle.Output, minResult.FileName, settings);
+                WriteMinFile(bundle, minResult, uglifyResult);
+            }
+            else
+            {
+                bundle.Output = bundle.Output
+                    .Replace("\t", string.Empty)
+                    .Replace("\r", string.Empty)
+                    .Replace("\n", string.Empty)
+                    .Replace("    ", string.Empty)
+                    .Replace(" {", "{")
+                    .Replace(": ", ":")
+                    .Replace(" 0px", "0")
+                    ;
+            }
+            WriteMinFile(bundle, minResult);
         }
 
         private static void MinifyHtml(Bundle bundle, MinificationResult minResult)
@@ -125,6 +142,23 @@ namespace BundlerMinifier
             else
             {
                 AddNUglifyErrors(uglifyResult, minResult);
+            }
+        }
+
+        private static void WriteMinFile(Bundle bundle, MinificationResult minResult)
+        {
+            var minFile = GetMinFileName(minResult.FileName);
+            minResult.MinifiedContent = bundle.Output;
+
+            bool containsChanges = FileHelpers.HasFileContentChanged(minFile, minResult.MinifiedContent);
+            minResult.Changed |= containsChanges;
+            OnBeforeWritingMinFile(minResult.FileName, minFile, bundle, containsChanges);
+
+            if (containsChanges)
+            {
+                Directory.CreateDirectory(Path.GetDirectoryName(minFile));
+                File.WriteAllText(minFile, minResult.MinifiedContent, new UTF8Encoding(false));
+                OnAfterWritingMinFile(minResult.FileName, minFile, bundle, containsChanges);
             }
         }
 

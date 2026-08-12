@@ -56,6 +56,14 @@ namespace BundlerMinifier
             }
         }
 
+        internal bool UseNuglify
+        {
+            get
+            {
+                return Minify.ContainsKey("useNuglify") && Minify["useNuglify"].ToString().Equals("true", StringComparison.OrdinalIgnoreCase);
+            }
+        }
+
         [JsonIgnore]
         public bool OutputIsMinFile
         {
