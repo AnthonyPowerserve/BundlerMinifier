@@ -5,6 +5,8 @@ using System.Linq;
 using System.Text;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Microsoft.Build.Utilities;
+using Microsoft.Build.Framework;
 
 namespace BundlerMinifier
 {
@@ -79,18 +81,20 @@ namespace BundlerMinifier
             return bundles;
         }
 
-        public static void ProcessBundle(string baseFolder, Bundle bundle)
+        public static void ProcessBundle(string baseFolder, Bundle bundle) => ProcessBundle(baseFolder, bundle, null);
+        public static void ProcessBundle(string baseFolder, Bundle bundle, Task task)
         {
             DateTime mostRecentWrite = default(DateTime);
             StringBuilder sb = new StringBuilder();
             List<string> inputFiles = bundle.GetAbsoluteInputFiles();
-
+            if (task != null){ task.Log.LogMessage(MessageImportance.High, Environment.NewLine + $"\tBundling '{bundle.FileName}'"); }
             for (int i = 0; i < inputFiles.Count; i++)
             {
                 var input = inputFiles[i];
 
                 string file = Path.Combine(baseFolder, input);
 
+                if (task != null) { task.Log.LogMessage(MessageImportance.High, Environment.NewLine + $"\t\tIncluding '{file}'"); }
                 if (File.Exists(file))
                 {
                     string content;
@@ -113,6 +117,10 @@ namespace BundlerMinifier
                         sb.AppendLine();
 
                     sb.Append(content);
+                }
+                else
+                {
+                    if (task != null) { task.Log.LogError(Environment.NewLine + $"\t\t\tCould not find file: '{file}'"); }
                 }
             }
 

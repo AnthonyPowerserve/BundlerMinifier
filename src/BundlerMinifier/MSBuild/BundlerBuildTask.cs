@@ -42,7 +42,7 @@ namespace BundlerMinifier
             BundleMinifier.AfterWritingMinFile += FileMinifier_AfterWritingMinFile;
             processor.MinificationSkipped += (s, e) => { Log.LogMessage(MessageImportance.Normal, "Bundler: No changes, skipping minification of " + e.OutputFileName); };
 
-            processor.Process(configFile.FullName);
+            processor.Process(configFile.FullName, this);
 
             Log.LogMessage(MessageImportance.High, "Bundler: Done processing " + configFile.Name);
 

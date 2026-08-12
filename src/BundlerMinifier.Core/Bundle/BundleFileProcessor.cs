@@ -1,8 +1,10 @@
-﻿using System;
+﻿using Microsoft.Build.Utilities;
+using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Text;
 using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace BundlerMinifier
 {
@@ -29,7 +31,9 @@ namespace BundlerMinifier
             return true;
         }
 
-        public bool Process(string fileName, IEnumerable<Bundle> bundles = null)
+        public bool Process(string fileName, Microsoft.Build.Utilities.Task task) => Process(fileName, null, task);
+        public bool Process(string fileName, IEnumerable<Bundle> bundles = null) => Process(fileName, null, null);
+        public bool Process(string fileName, IEnumerable<Bundle> bundles, Microsoft.Build.Utilities.Task task)
         {
             FileInfo info = new FileInfo(fileName);
             bundles = bundles ?? BundleHandler.GetBundles(fileName);
@@ -37,7 +41,7 @@ namespace BundlerMinifier
 
             foreach (Bundle bundle in bundles)
             {
-                result |= ProcessBundle(info.Directory.FullName, bundle);
+                result |= ProcessBundle(info.Directory.FullName, bundle, task);
             }
 
             return result;
@@ -96,7 +100,8 @@ namespace BundlerMinifier
             }
         }
 
-        private bool ProcessBundle(string baseFolder, Bundle bundle)
+        private bool ProcessBundle(string baseFolder, Bundle bundle) => ProcessBundle(baseFolder, bundle, null);
+        private bool ProcessBundle(string baseFolder, Bundle bundle, Microsoft.Build.Utilities.Task task)
         {
             OnProcessing(bundle, baseFolder);
             var inputs = bundle.GetAbsoluteInputFiles();
@@ -104,7 +109,7 @@ namespace BundlerMinifier
 
             if (bundle.GetAbsoluteInputFiles(true).Count > 1 || bundle.InputFiles.FirstOrDefault() != bundle.OutputFileName)
             {
-                BundleHandler.ProcessBundle(baseFolder, bundle);
+                BundleHandler.ProcessBundle(baseFolder, bundle, task);
 
                 if (!bundle.IsMinificationEnabled || !bundle.OutputIsMinFile)
                 {
